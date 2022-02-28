@@ -1,4 +1,4 @@
-#Server
+#Server Program
 #include<stdio.h>
 #include<fcntl.h>
 #include<arpa/inet.h>
