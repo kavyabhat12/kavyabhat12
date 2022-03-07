@@ -1,51 +1,33 @@
 #include<stdio.h>
 #include<stdlib.h>
-int a[10],b[10],n;
-int min(int a,int b);
-{
-return a<b?a:b;
-}
-void floyd()
-{
-int i,j,k;
-for(k=1;k<=n;k++)
-{
-for(i=1;i<=n;i++)
-{
-for(j=1;j<=n;j++)
-{
-a[i][j]=min(a[i][j],a[i][k]+a[k][j]);
-}
-}
-}
-}
 int main()
 {
-int i,j;
-{
-printf("Enter the number of nodes\n");
+int a[100],i,j,p,t,n;
+printf("Enter the total number of elements\n");
 scanf("%d",&n);
-printf("Enter the matrix elements\n");
-for(i=1;i<=n;i++)
-for(j=1;j<=n;j++)
+printf("Enter the array element");
+for(i=0;i<n;i++)
+scanf("%d",&a[i]);
+printf("sorted list\n");
+for(i=0;i<n-1;i++)
 {
-scanf("%d",&a[i][j]);
-if(a[i][j]==0)
-a[i][j]=999;
-if(a[i]==a[j])
-a[i][j]=0;
-}
-floyd();
-printf("The distance matrix is\n");
-for(i=1;i<=n;i++)
+p=i;
+for(j=i+1;j<n;j++)
 {
-for(j=1;j<=n;j++)
+if(a[p]>a[j])
 {
-printf("%d",a[i][j]);
-}
-printf("\n");
+p=j;
 }
 }
+if(p!=i)
+{
+t=a[i];
+a[i]=a[p];
+a[p]=t;
+}
+}
+for(i=0;i<n;i++)
+printf("%d\t",a[i]);
 return 0;
 }
 
