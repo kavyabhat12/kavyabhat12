@@ -1,0 +1,231 @@
+
+mysql -h 192.168.14.71 -u VP21MC020 -p
+
+use VP21MC020_college;
+
+commit
+
+
+
+
+
+
+create database vp21mc020_college;
+create table branch(branchid varchar(5) primary key,
+                    branchname varchar(30) not null,
+                    hod varchar(20) not null);
+                    
+                    
+insert into branch values('b1','MCA','suma');
+insert into branch values('b2','MBA','manasa');
+insert into branch values('b3','CS','aihira');
+insert into branch values('b4','Mechanical','kavana');
+insert into branch values('b5','Civil','deepti');
+
+
+                    
+ create table student(usn varchar(10) primary key,
+                  name varchar(30) not null,
+                  address varchar(40) not null,
+                  branchid varchar(5) not null,
+                  sem varchar(2) not null,
+ foreign key(branchid) references branch(branchid));
+ 
+ 
+ insert into student values('4vp21mc020','kavya','puttur','b1','2');
+ 
+ insert into student values('4vp21mb001','kiyara','mangalore','b2','1');
+ insert into student values('4vp21cs024','megha','madikeri','b3','2');
+ insert into student values('4vp21me005','sahana','ujire','b4','2');
+ insert into student values('4vp21cl027','chintan','sulya','b5','2');
+ insert into student values('4vp21mc028','sanath','mangalore','b1','2');
+ insert into student values('4vp21mb029','karan','mangalore','b2','3');
+  insert into student values('4vp21mc030','navya','puttur','b1','1');
+   insert into student values('4vp21mc031','sneha','mangalore','b1','1');
+
+                  
+create table author(authorid varchar(10) primary key,
+                    authorname varchar(30) not null,
+                    country varchar(20) not null,
+                    age int(10) not null);
+
+insert into author values('1','ramez elmasri','arlinhton',51);
+insert into author values('2','yunuz','japan',34);
+insert into author values('3','deepak kehmani','India',39);
+insert into author values('4','alis horowitz','us',49);
+          
+                    
+                    
+create table borrow(usn varchar(10) not null,
+                    bookid varchar(10) not null,
+                    borrowed_date date not null,
+                    primary key(usn,bookid),
+                    foreign key(usn) references student(usn),
+                    foreign key(bookid) references book(bookid));
+                    
+insert into borrow values('4vp21mc028','bk1','2010-09-02');
+insert into borrow values('4vp21cl027','bk2','2019-07-20');
+
+insert into borrow values('4vp21mc028','bk2','2017-09-02');
+
+insert into borrow values('4vp21mb001','bk1','2009-09-02');
+insert into borrow values('4vp21mb001','bk2','2009-09-02');
+
+
+
+                    
+                    
+                    
+                    
+create table book(bookid varchar(10) primary key,
+                  bookname varchar(30) not null,
+                  authorid varchar(10) not null,
+                  publisher varchar(20) not null,
+                  branchid varchar(5) not null,
+                  foreign key(branchid) references branch(branchid),
+                  foreign key(authorid) references author(authorid));
+                  
+                  
+insert into book values('bk1','dbms','1','pearson','b1');  
+insert into book values('bk2','research','2','pearson','b3');  
+insert into book values('bk4','management','3','taylor','b2');  
+insert into book values('bk5','data structure','1','mc graw hill','b1');  
+
+
+
+
+
+select * from 
+student where branchid
+in(select branchid 
+from branch where branchname='MCA');
+
+select usn,name from student s,branch b where student.branchid=branch.branchid and branchname='MCA';
+select usn,name from student s,branch b where s.branchid=b.branchid and branchname='MCA';
+
+
+select ALL branchid from student;
+select DISTINCT branchid from student;
+
+select * from author 
+where country like 
+"%nd%";
+
+select * from author 
+where country like 
+"_nd__";
+       
+select * 
+from author
+where age
+BETWEEN 50 and 55;    
+
+
+select usn,name
+from student s,branch b
+where s.branchid=b.branchid 
+and branchname='mca' and sem='2';
+
+           
+select usn,name
+from student s,branch b
+where s.branchid=b.branchid 
+and branchname='mca' and sem='2' order by name;     
+          
+select usn,name
+from student s,branch b
+where s.branchid=b.branchid 
+and branchname='mca' and sem='2' order by name desc;     
+
+select usn 
+from student UNION 
+select usn from borrow;    
+
+select usn 
+from student MYSQL INTERSECT
+select usn from borrow;     
+
+select usn,name
+from student s,branch b
+where s.branchid=b.branchid 
+and branchname='mca' and sem is '2';
+
+select * from student s,borrow b where s.usn=b.usn;
+select distinct name from student s,borrow b where s.usn=b.usn;
+
+
+select  distinct name from student,branch where usn
+in(select usn from borrow);
+
+
+
+
+select  distinct name from student,branch where student.usn
+in(select usn from borrow);
+
+select distinct name from student ,borrow where student.usn NOT IN(select usn from borrow);
+
+select book.authorid,authorname from book,author;
+
+select book.authorid,authorname 
+from book,author 
+where book.authorid=author.authorid;
+
+       
+ 
+select book.authorid,authorname 
+from book,author 
+where book.authorid=author.authorid group by book.authorid;
+
+ 
+select book.authorid,authorname,count(*)
+from book,author 
+where book.authorid=author.authorid group by book.authorid;
+
+select book.authorid,authorname,count(*) as total
+from book,author 
+where book.authorid=author.authorid group by book.authorid;
+
+
+select s.usn,name,branchname,bookname,authorname,borrowed_date
+from student s,branch b,book k,author a,borrow r 
+where s.usn=r.usn 
+and s.branchid=b.branchid 
+and r.bookid=k.bookid 
+and k.authorid=a.authorid 
+and branchname='mca' 
+and sem='2';
+       
+
+       
+select usn 
+from borrow 
+group by usn 
+having count(usn)>=2;
+
+select * 
+from student 
+where usn in      
+(select usn 
+from borrow 
+group by usn 
+having count(usn)>=2);
+       
+     
+       
+                 
+                         
+                  
+                                      
+                 
+                  
+                              
+                 
+                  
+                  
+                  
+                  
+                  
+                  
+                    
+                  

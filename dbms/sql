@@ -1,0 +1,146 @@
+create table branch
+(usn varchar(10) primary key,
+branch varchar(30) not null
+);
+
+
+alter table branch
+add foreign key (usn) references student (usn); 
+
+
+
+create table branch(bid int(5) primary key,
+                    bname varchar(20) not null,
+                    hod varchar(20) not null);
+                    
+create table stud (usn varchar(10) primary key,
+                   sname varchar(20) not null,
+                   address varchar(30) not null,
+                FOREIGN KEY (bid) REFERENCES branch(bid),
+                   sem int(2) not null);
+                  
+                  
+                  
+                  
+                  
+                   CREATE TABLE Orders (
+    OrderID int NOT NULL,
+    OrderNumber int NOT NULL,
+    PersonID int,
+    PRIMARY KEY (OrderID),
+    FOREIGN KEY (PersonID) REFERENCES Persons(PersonID)
+); 
+
+
+
+
+
+mysql> select usn,name from student s,branch b where s.branchid=b.branchid and branchname='MCA';
++------------+--------+
+| usn        | name   |
++------------+--------+
+| 4vp21mc020 | kavya  |
+| 4vp21mc028 | sanath |
++------------+--------+
+2 rows in set (0.00 sec)
+
+mysql> select * from 
+    -> student where branchid
+    -> in(select branchid 
+    -> from branch where branchname='MCA');
++------------+--------+-----------+----------+-----+
+| usn        | name   | address   | branchid | sem |
++------------+--------+-----------+----------+-----+
+| 4vp21mc020 | kavya  | puttur    | b1       | 2   |
+| 4vp21mc028 | sanath | mangalore | b1       | 2   |
++------------+--------+-----------+----------+-----+
+2 rows in set (0.00 sec)
+
+mysql> select * from author 
+    -> where country like 
+    -> "%nd%";
++----------+----------------+---------+-----+
+| authorid | authorname     | country | age |
++----------+----------------+---------+-----+
+| 3        | deepak kehmani | India   |  39 |
++----------+----------------+---------+-----+
+1 row in set (0.00 sec)
+
+mysql> ^Mselect * from author 
+    -> where country like 
+    -> "_nd__";
++----------+----------------+---------+-----+
+| authorid | authorname     | country | age |
++----------+----------------+---------+-----+
+| 3        | deepak kehmani | India   |  39 |
++----------+----------------+---------+-----+
+1 row in set (0.00 sec)
+
+mysql>           
+mysql> select usn,name
+    -> from student s,branch b
+    -> where s.branchid=b.branchid 
+    -> and branchname='mca' and sem='2' order by name;                 
++------------+--------+
+| usn        | name   |
++------------+--------+
+| 4vp21mc020 | kavya  |
+| 4vp21mc028 | sanath |
++------------+--------+
+2 rows in set (0.00 sec)
+
+mysql>                  
+mysql>                   
+mysql>                             
+mysql> select usn,name
+    -> from student s,branch b
+    -> where s.branchid=b.branchid 
+    -> and branchname='mca' and sem='2' order by name desc;                 
++------------+--------+
+| usn        | name   |
++------------+--------+
+| 4vp21mc028 | sanath |
+| 4vp21mc020 | kavya  |
++------------+--------+
+2 rows in set (0.00 sec)
+
+mysql>                  commit;
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> 
+mysql> select usn 
+    -> from student UNION 
+    -> select usn from borrow;            
++------------+
+| usn        |
++------------+
+| 4vp21mc020 |
+| 4vp21mc028 |
+| 4vp21mc030 |
+| 4vp21mc031 |
+| 4vp21mb001 |
+| 4vp21mb029 |
+| 4vp21cs024 |
+| 4vp21me005 |
+| 4vp21cl027 |
++------------+
+9 rows in set (0.00 sec)
+
+   
+mysql> select s.usn,name,branchname,bookname,authorname,borrowed_date
+    -> from student s,branch b,book k,author a,borrow r 
+    -> where s.usn=r.usn 
+    -> and s.branchid=b.branchid 
+    -> and r.bookid=k.bookid 
+    -> and k.authorid=a.authorid 
+    -> and branchname='mca' 
+    -> and sem='2';
++------------+--------+------------+----------+---------------+---------------+
+| usn        | name   | branchname | bookname | authorname    | borrowed_date |
++------------+--------+------------+----------+---------------+---------------+
+| 4vp21mc028 | sanath | MCA        | dbms     | ramez elmasri | 2010-09-02    |
+| 4vp21mc028 | sanath | MCA        | research | yunuz         | 2017-09-02    |
++------------+--------+------------+----------+---------------+---------------+
+2 rows in set (0.00 sec)
+
+
