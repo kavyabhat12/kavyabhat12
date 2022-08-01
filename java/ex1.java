@@ -53,7 +53,7 @@ public class ex1 {
 
             }break;
         }
-        System.out.println("");
+        System.out.println("Do you want to continue");
 opt=sc.nextBoolean();
         }
     }
