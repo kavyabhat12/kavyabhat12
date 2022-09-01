@@ -1,0 +1,272 @@
+create table tourist_place(tpid int (5)
+primary key,
+history varchar(20),
+kilometers int (3),
+state varchar(20),
+tpname varchar(20));
+
+
+insert into tourist_place values(1,'oldest temple',100,'bihar','mundeshwari');
+insert into tourist_place values(2,'palace',150,'france','the Eiffel Tower');
+insert into tourist_place values(3,'beach',100,'thailand','Patong Beach');
+insert into tourist_place values(4,'hotel',100,'cuba','Old Havana.');
+insert into tourist_place values(5,'water fall',60,'canada','Niagara Falls');
+insert into tourist_place values(2,'palace',100,'agra','taj mahal');
+insert into tourist_place values(6,'temple',50,'karnataka','murudeshwara');
+
+
+
+
+
+
+create table tourist
+(tid int(5) primary key,
+country varchar(20),
+age int(10),
+tname varchar(20));
+
+
+insert into tourist values(21,'india',22,'ram');
+insert into tourist values(22,'africa',25,'mero');
+insert into tourist values(23,'india',28,'mani');
+insert into tourist values(24,'canada',30,'dhani');
+insert into tourist values(25,'india',34,'deep');
+insert into tourist values(26,'india',37,'anag');
+insert into tourist
+
+create table visits(
+tpid int(5) references tourist_place(tpid),
+tid int(5) references tourist(tid),
+vdate date,
+primary key(tpid,tid));
+
+insert into visits values(1,22,'2022-04-09');
+insert into visits values(1,23,'2022-04-09');
+
+insert into visits values(1,24,'2022-04-09');
+
+insert into visits values(1,25,'2022-04-09');
+
+insert into visits values(1,26,'2022-04-09');
+
+
+
+
+
+insert into visits values(1,2,'2022-08-09');
+insert into visits values(6,21,'2020-09-09');
+
+
+
+insert into visits values(1,22,'2022-04-09');
+insert into visits values(2,22,'2002-04-01');
+insert into visits values(3,22,'2003-04-09');
+insert into visits values(4,22,'2004-04-09');
+insert into visits values(5,22,'2005-04-09');
+insert into visits values(6,22,'2006-04-09');
+
+
+insert into visits values(2,23,'2022-02-09');
+insert into visits values(3,24,'2022-01-09');
+insert into visits values(4,25,'2022-08-09');
+insert into visits values(1,25,'2022-09-09');
+insert into visits values(2,2,'2022-08-09');
+
+
+
+insert into visits values(&tpid,&tid,'&vdate');
+
+
+
+
+create table email
+(tid int(10) references tourist(tid),
+email varchar(20),
+primary key(tid,email));
+
+
+insert into email values(2,'xyz@gmail.com');
+insert into email values(21,'xz@gmail.com');
+insert into email values(22,'ms@gmail.com');
+insert into email values(23,'py@gmail.com');
+
+
+mysql> desc tourist_place;
++------------+-------------+------+-----+---------+-------+
+| Field      | Type        | Null | Key | Default | Extra |
++------------+-------------+------+-----+---------+-------+
+| tpid       | int         | NO   | PRI | NULL    |       |
+| history    | varchar(20) | YES  |     | NULL    |       |
+| kilometers | int         | YES  |     | NULL    |       |
+| state      | varchar(20) | YES  |     | NULL    |       |
+| tpname     | varchar(20) | YES  |     | NULL    |       |
++------------+-------------+------+-----+---------+-------+
+5 rows in set (0.00 sec)
+
+mysql> desc tourist;
++---------+-------------+------+-----+---------+-------+
+| Field   | Type        | Null | Key | Default | Extra |
++---------+-------------+------+-----+---------+-------+
+| tid     | int         | NO   | PRI | NULL    |       |
+| country | varchar(20) | YES  |     | NULL    |       |
+| age     | int         | YES  |     | NULL    |       |
+| tname   | varchar(20) | YES  |     | NULL    |       |
++---------+-------------+------+-----+---------+-------+
+4 rows in set (0.00 sec)
+
+mysql> desc visits;
++-------+------+------+-----+---------+-------+
+| Field | Type | Null | Key | Default | Extra |
++-------+------+------+-----+---------+-------+
+| tpid  | int  | NO   | PRI | NULL    |       |
+| tid   | int  | NO   | PRI | NULL    |       |
+| vdate | date | YES  |     | NULL    |       |
++-------+------+------+-----+---------+-------+
+3 rows in set (0.00 sec)
+
+mysql> desc email;
++-------+-------------+------+-----+---------+-------+
+| Field | Type        | Null | Key | Default | Extra |
++-------+-------------+------+-----+---------+-------+
+| tid   | int         | NO   | PRI | NULL    |       |
+| email | varchar(20) | NO   | PRI | NULL    |       |
++-------+-------------+------+-----+---------+-------+
+2 rows in set (0.00 sec)
+
+
+mysql> select * from tourist;
++-----+---------+------+-------+
+| tid | country | age  | tname |
++-----+---------+------+-------+
+|   2 | india   |   22 | kavya |
+|  21 | india   |   22 | ram   |
+|  22 | africa  |   25 | mero  |
+|  23 | india   |   28 | mani  |
+|  24 | canada  |   30 | dhani |
+|  25 | india   |   34 | deep  |
+|  26 | india   |   37 | anag  |
++-----+---------+------+-------+
+7 rows in set (0.00 sec)
+
+mysql> select * from tourist_place;
++------+------------+------------+----------+---------------+
+| tpid | history    | kilometers | state    | tpname        |
++------+------------+------------+----------+---------------+
+|    2 | palace     |        100 | agra     | taj mahal     |
+|    3 | beach      |        100 | thailand | Patong Beach  |
+|    4 | hotel      |        100 | cuba     | Old Havana.   |
+|    5 | water fall |         60 | canada   | Niagara Falls |
++------+------------+------------+----------+---------------+
+4 rows in set (0.00 sec)
+
+mysql> select * from visits;
++------+-----+------------+
+| tpid | tid | vdate      |
++------+-----+------------+
+|    1 |   2 | 2022-08-09 |
+|    1 |  21 | 2022-07-09 |
+|    1 |  22 | 2022-04-09 |
+|    1 |  25 | 2022-09-09 |
+|    2 |   2 | 2022-08-09 |
+|    2 |  23 | 2022-02-09 |
+|    3 |  24 | 2022-01-09 |
+|    4 |  25 | 2022-08-09 |
++------+-----+------------+
+8 rows in set (0.00 sec)
+
+mysql> select * from email;
+ * from email;
+^C
+mysql> select * from email;
++-----+---------------+
+| tid | email         |
++-----+---------------+
+|   2 | xyz@gmail.com |
+|  21 | xz@gmail.com  |
+|  22 | ms@gmail.com  |
+|  23 | py@gmail.com  |
++-----+---------------+
+4 rows in set (0.00 sec)
+
+select state,count(tpid) from tourist_place group by
+state order by count(tpid)
+desc limit 1;
+
+
+select tp.tpid,tp.tpname,tp.state,count(v.tid)
+from tourist_place tp,visits v where
+v.tpid=tp.tpid group by v.tpid order by count(v.tpid) desc limit 1;
+
+
+mysql> select state,count(tpid) from tourist_place group by
+    -> state order by count(tpid)
+    -> desc limit 1;
++-------+-------------+
+| state | count(tpid) |
++-------+-------------+
+| agra  |           1 |
++-------+-------------+
+1 row in set (0.00 sec)
+
+mysql> 
+mysql> select tp,tpid,tp.tpname,tp.state,count(v.tid)
+    -> from tourist_place tp,visits v where
+    -> v.tpid=tp.tpid group by v.tpid order by count(v.tpid) desc limit 1;
+ERROR 1054 (42S22): Unknown column 'tp' in 'field list'
+mysql> 
+mysql> select tp.tpid,tp.tpname,tp.state,count(v.tid)
+    -> from tourist_place tp,visits v where
+    -> v.tpid=tp.tpid group by v.tpid order by count(v.tpid) desc limit 1;
++------+-----------+-------+--------------+
+| tpid | tpname    | state | count(v.tid) |
++------+-----------+-------+--------------+
+|    2 | taj mahal | agra  |            2 |
++------+-----------+-------+--------------+
+1 row in set (0.00 sec)
+
+select * from tourist
+where tid in
+(select tid from visits,tourist_place
+where visits.tpid=tourist_place.tpid
+and state='karnataka');
+
+
+
+select * 
+from tourist 
+where tid in( select tid from visits,tourist_place 
+where visits.tpid=tourist_place.tpid 
+group by tid
+ having count(distinct state) in (select count(distinct state) from tourist_place));
+
+ select * 
+from tourist_place 
+where tpid in(select tpid from visits,tourist 
+              where  visits.tid=tourist.tid 
+             group by tpid
+            having count( distinct country)=(select count(distinct country) from tourist));
+            
+            
+select *  from tourist  where tid in( select tid from visits,tourist_place  where visits.tpid=tourist_place.tpid  group by tid  having count(distinct state) in (select count(distinct state) from tourist_place));
++-----+---------+------+-------+
+| tid | country | age  | tname |
++-----+---------+------+-------+
+|  22 | africa  |   25 | mero  |
++-----+---------+------+-------+
+
+select * 
+    -> from tourist_place 
+    -> where tpid in(select tpid from visits,tourist 
+    ->               where  visits.tid=tourist.tid 
+    ->              group by tpid
+    ->             having count( distinct country)=(select count(distinct country) from tourist));
++------+---------------+------------+-------+-------------+
+| tpid | history       | kilometers | state | tpname      |
++------+---------------+------------+-------+-------------+
+|    1 | oldest temple |        100 | bihar | mundeshwari |
++------+---------------+------------+-------+-------------+
+
+
+
+
+
