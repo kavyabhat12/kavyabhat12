@@ -1,0 +1,255 @@
+create table const(cons_id int(10) primary key,
+name varchar(30),
+cstate varchar(20),
+no_of_voters int(10));
+
+
+insert into const values(11,'mangalore','karnataka',8000);
+insert into const values(12,'puttur','karnataka',4000);
+insert into const values(13,'Udma','kerala',6000);
+insert into const values(14,'kasaragod','kerala',7000);
+
+
+create table party(
+pid int(10) primary key,
+pname varchar(20),
+psymb varchar(20));
+
+insert into party values(21,'BJP','lotus');
+insert into party values(22,'congress','hand');
+insert into party values(23,'BSP','elephant');
+
+
+create table cand
+(cand_id int(10) primary key,
+phone int(10),
+age int(10),
+state varchar(10),
+name varchar(20),
+pid int(10) references party(pid));
+
+
+insert into cand values(31,890726262,30,'karnataka','kiran',21);
+insert into cand values(32,890726244,32,'kerala','kavan',22);
+insert into cand values(33,89075665,56,'karnataka','sahana',23);
+
+
+
+create table voter
+(vid int(10) primary key,
+vname varchar(20),
+vage int(5),
+vaddr varchar(20),
+cons_id int(10) references const(cons_id),
+cand_id int(10) references cand(cand_id));
+
+
+insert into voter values(41,'mero',24,'puttur',12,31);
+
+
+insert into voter values(42,'kiyara',27,'mangalore',11,32);
+
+
+insert into voter values(43,'mani',24,'puttur',12,31);
+
+
+insert into voter values(44,'dhani',24,'mangalore',11,32);
+
+
+
+
+
+create table contest(
+cons_id int(10) references const(cons_id),
+cand_id int(10) references cand(cand_id));
+
+
+insert into contest values(11,31);
+insert into contest values(12,32);
+insert into contest values(13,33);
+
+DELIMITER $$
+create trigger new1
+after insert on voter for each row 
+begin
+update const set
+const.no_of_voters=const.no_of_voters
++3 where cons_id=new.cons_id;
+end$$
+
+
+
+
+mysql> DELIMITER $$
+mysql> create trigger new1
+    -> after insert on voter for each row 
+    -> begin
+    -> update const set
+    -> const.no_of_voters=const.no_of_voters
+    -> +3 where cons_id=new.cons_id;
+    -> end$$
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> select * from const;
+    -> $$                 
+$$
+^C
+mysql> $$
+ERROR: 
+No query specified
+
+mysql> select * from const;
+    -> $$
++---------+-----------+-----------+--------------+
+| cons_id | name      | cstate    | no_of_voters |
++---------+-----------+-----------+--------------+
+|      11 | mangalore | karnataka |         8000 |
+|      12 | puttur    | karnataka |         4000 |
+|      13 | Udma      | kerala    |         6000 |
+|      14 | kasaragod | kerala    |         7000 |
++---------+-----------+-----------+--------------+
+4 rows in set (0.00 sec)
+
+mysql> insert into voter values(54,'dhani',24,'mangalore',11,32);
+    -> $$
+Query OK, 1 row affected (0.01 sec)
+
+mysql> select * from const;
+    -> $$
++---------+-----------+-----------+--------------+
+| cons_id | name      | cstate    | no_of_voters |
++---------+-----------+-----------+--------------+
+|      11 | mangalore | karnataka |         8003 |
+|      12 | puttur    | karnataka |         4000 |
+|      13 | Udma      | kerala    |         6000 |
+|      14 | kasaragod | kerala    |         7000 |
++---------+-----------+-----------+--------------+
+4 rows in set (0.00 sec)
+
+
+
+1)
+
+select * 
+from cand 
+where cand_id in (select cand_id from contest join const on const.cons_id=const.cons_id 
+group by cand_id 
+having count(distinct(const.cstate))>1);
+
+
+
+
+ 
+   save as proc.sql
+   
+   both dbms5 and proc are int the same floder
+   
+  DELIMITER // 
+  create procedure proc (IN vid int(10),IN vname varchar(20),IN age int(10),IN city varchar(20),  IN state varchar(20))
+  begin 
+  declare msg varchar(20);
+  if age>=18 then
+   insert into Voter ( Vid,Vname,Age,State)
+   values(Vid,Vname,Age,State);
+   set msg="row inserted";
+   else
+   set msg="voter not eligible";
+   end if;
+   select msg;
+   end //
+  
+   DELIMITER ;
+   
+   after this type in the terminal as source proc.sql
+   
+  then 
+  
+ call proc('108','anu',17,'puttur','karnataka');
++--------------------+
+| msg                |
++--------------------+
+| voter not eligible |
++--------------------+
+1 row in set (0.00 sec)
+
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> call proc('108','anaga',19,'puttur','karnataka');
++--------------+
+| msg          |
++--------------+
+| row inserted |
++--------------+
+1 row in set (0.00 sec)
+
+Query OK, 0 rows affected (0.00 sec)
+
+1)
+
+select * 
+    -> from cand 
+    -> where cand_id in (select cand_id from contest join const on const.cons_id=const.cons_id 
+    -> group by cand_id 
+    -> having count(distinct(const.cstate))>1);
++---------+-----------+------+-----------+--------+------+
+| cand_id | phone     | age  | state     | name   | pid  |
++---------+-----------+------+-----------+--------+------+
+|      31 | 890726262 |   30 | karnataka | kiran  |   21 |
+|      32 | 890726244 |   32 | kerala    | kavan  |   22 |
+|      33 |  89075665 |   56 | karnataka | sahana |   23 |
++---------+-----------+------+-----------+--------+------+
+
+
+
+DELIMITER $$
+CREATE PROCEDURE new1(CSname varchar(20))
+begin
+select no_of_voters from const where csname=name;
+end$$
+
+
+4)
+
+mysql> DELIMITER $$
+mysql> CREATE PROCEDURE new1(CSname varchar(20))
+    -> begin
+    -> select no_of_voters from const where csname=name;
+    -> end$$
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> call new1('puttur');
+    -> $$
++--------------+
+| no_of_voters |
++--------------+
+|         4000 |
++--------------+
+1 row in set (0.00 sec)
+
+Query OK, 0 rows affected (0.00 sec)
+
+
+
+2) select const.cstate,count(cons_id) 
+  from const 
+  group by const.cstate  
+  order by count(cons_id) desc limit 1;
+
+
+select const.cstate,count(cons_id) 
+    ->   from const 
+    ->   group by const.cstate  
+    ->   order by count(cons_id) desc limit 1;
+    -> $$
++-----------+----------------+
+| cstate    | count(cons_id) |
++-----------+----------------+
+| karnataka |              2 |
++-----------+----------------+
+1 row in set (0.00 sec)
+
+
+
+
+
+
